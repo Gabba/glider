@@ -22,21 +22,21 @@ var Glider = Class.create({
         section: $(section),
         index: counter,
         left: function() {
-          left = 0;
+          value = 0;
           for (i = 0; i < counter; i++) {
-            left += sections[i].getWidth();
+            value += sections[i].getWidth();
           }
-          return left;
-        }.bind(this)(),
+          return value;
+        }(),
         top: function() {
-          top = 0;
+          value = 0;
           for (i = 0; i < counter; i++) {
-            top += sections[i].getHeight();
+            value += sections[i].getHeight();
           }
-          return top;
-        }.bind(this)()
+          return value;
+        }()
       }
-    }.bind(this));
+    });
   },
 
   setInitialSection: function() {
@@ -111,7 +111,7 @@ var Glider = Class.create({
     if (this.options.get('onSlide')) {
       this.options.get('onSlide')(sectionInfo.section);
     }
-  },
+  }
   
 });
 
