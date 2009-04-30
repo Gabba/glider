@@ -14,15 +14,15 @@ You can also specify the direction and parameters for the animation as well as a
 
   glider = new Glider($('glider', { direction: 'x', transition: Effect.Transitions.sinoidal, duration: .6 }, myCallBackFunction));
 
-The glider's direction defaults to horizontal (x). Additionally to the Glider class, there is a GliderLink class. Just
-<b>instantiate a new GliderLink for all links on the page that are supposed to trigger the glider</b>, e.g.:
+The glider's direction defaults to horizontal (x). Additionally to the <tt>Glider</tt> class, there is the <tt>GliderLink</tt> class. Just
+instantiate a new <tt>GliderLink</tt> for all links on the page that are supposed to trigger the glider to show a section, e.g.:
 
   $$('a[href^="#"]').each(function(link) {
     link = new GliderLink(link, glider);
   });
 
-Setup of the HTML required for the glider to work is pretty straight forward. You need <b>a surrounding div, a div that
-marks the list of sections the glider can glide and one div fore each section</b>:
+Setup of the HTML required for the glider to work is pretty straight forward. You need a surrounding div, a div that
+marks the list of sections and one div for each section:
 
   <div id="glider">
     <div class="sections">
@@ -38,12 +38,16 @@ marks the list of sections the glider can glide and one div fore each section</b
     </div>
   </div>
 
-<b>The ids of these sections have to correspond to the GliderLinks' hrefs</b>, e.g. a link with href="#section1" triggers the glider to glide div#section1 into view.
+<b>The ids of these sections have to correspond to the <tt>GliderLink</tt>s' hrefs</b>, e.g. a link with <tt>href="#section1"</tt> triggers the glider to glide <tt>div#section1</tt> into view.
 
-Glider will also scale the surrounding container (div#glider) to match the current section's width or height respectively. To disable that scaling, simply specify a fixed width and/or height for all sections.
+<tt>Glider</tt> will also resize the surrounding container to match the current section's width or height respectively. To disable that scaling, simply specify a fixed width and/or height for all sections.
 
 <b>For guidance on the required CSS, see the examples</b>
 
+
+== TODOs/ future plans
+
+At the moment there are neither TODOs nor future plans. If you want ot suggest any, do so at github.com/marcoow/glider/issues.
 
 == Author
 
