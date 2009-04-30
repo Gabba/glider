@@ -1,17 +1,5 @@
-/**
- * class Glider
- *
- * The main Glider class
- **/
 var Glider = Class.create({
 
-  /**
-   * Glider.new(container[, options = {}]) -> Glider
-   * - container (Element): the container that holds the glidable setions
-   * - options (Hash): options for the glider ({ direction: ('x'|'y'), transition: Effect.Transitions, duration: Float, onGlide: Function })
-   *
-   * Initializes a new Glider
-   **/
   initialize: function(container, options) {
     this.container = $(container);
     this.options = $H({ direction: 'x', transition: Effect.Transitions.sinoidal, duration: .6 }).merge(options);
@@ -24,7 +12,6 @@ var Glider = Class.create({
     this.setInitialSection();
   },
 
-  // private method -> no documentation
   collectSectionInfo: function() {
     counter = -1;
     sections = this.sectionsContainer.select('.section');
@@ -51,7 +38,6 @@ var Glider = Class.create({
     });
   },
 
-  // private method -> no documentation
   setInitialSection: function() {
     initial = null;
     if (document.location.href.indexOf('#') > 0) {
@@ -69,14 +55,12 @@ var Glider = Class.create({
     this.showSection(initial.id, 0.0000000000001);
   },
 
-  // private method -> no documentation
   getSectionInfo: function(id) {
     return this.sectionInfo.find(function(sectionInfo) {
       return sectionInfo.section.id == id;
     });
   },
 
-  // private method -> no documentation
   calculateEffects: function(sectionInfo, duration) {
     effects = [];
     movements = { x: 0, y: 0 }
@@ -111,13 +95,6 @@ var Glider = Class.create({
     return effects;
   },
 
-  /**
-   * Glider#showSection(sectionId[, duration]) -> null
-   * - sectionId (String): the element id of the section to show
-   * - duration (Float): the duration for the slide effect(s)
-   *
-   * Show a section by gliding the sections into the according direction until the section to show is reached.
-   **/
   showSection: function(sectionId, duration) {
     duration = duration || this.options.get('duration');
     Effect.Queues.get('simplabs:glider').each(function(effect) { effect.cancel(); });
@@ -131,48 +108,27 @@ var Glider = Class.create({
       queue: { scope: 'simplabs:glider' },
       afterFinish: function() {
         this.currentSection = sectionInfo;
+        console.log('INDEX: ' + this.currentSection.index);
         if (this.options.get('onGlide')) {
-          this.options.get('onGlide')(this.currentSection.section);
+          this.options.get('onGlide')(sectionInfo.section);
         }
       }.bind(this)
     });
   },
 
-  /**
-   * Glider#atFirstSection() -> null
-   *
-   * Gets whether the Glider is currently positioned at the first section (Glider#previousSection() of course won't work then)
-   **/
   atFirstSection: function() {
     return this.currentSection && this.currentSection.index == 0;
   },
 
-  /**
-   * Glider#atLastSection() -> null
-   *
-   * Gets whether the Glider is currently positioned at the last section (Glider#nextSection() of course won't work then)
-   **/
   atLastSection: function() {
     return this.currentSection && this.currentSection.index == (this.sectionInfo.length - 1);
   },
 
-  /**
-   * Glider#showNextSection() -> null
-   *
-   * Glides to the next section (the section after the one that is currently displayed); won't do anything if the 
-    * Glider is currently positioned at the last section (see Glider#atLastSection())
-   **/
   showNextSection: function() {
     if (this.atLastSection()) return;
     this.showSection(this.sectionInfo[this.currentSection.index + 1].section.id);
   },
 
-  /**
-   * Glider#showPreviousSection() -> null
-   *
-   * Glides to the previous section (the section before the one that is currently displayed); won't do anything if the 
-   * Glider is currently positioned at the first section (see Glider#atFirstSection())
-   **/
   showPreviousSection: function() {
     if (this.atFirstSection()) return;
     this.showSection(this.sectionInfo[this.currentSection.index - 1].section.id);
@@ -180,27 +136,14 @@ var Glider = Class.create({
 
 });
 
-/**
- * class GliderLink
- *
- * GliderLinks are special links that toggle the glider to glide to specific sections.
- **/
 var GliderLink = Class.create({
 
-  /**
-   * GliderLink.new(link, glider) -> GliderLink
-   * - link (Element): the link element; must be an <a> tag with the href attrbute set to '#sectionId' (including the '#')
-   * - glider (Glider): the glider to show the section in
-   *
-   * Initializes a new GliderLink
-   **/
   initialize: function(link, glider) {
     this.link = $(link);
     this.glider = glider;
     this.link.observe('click', this.onclick.bindAsEventListener(this));
   },
 
-  // private method -> no documentation
   onclick: function(event) {
     Event.stop(event);
     this.glider.showSection(this.link.href.split('#').last());

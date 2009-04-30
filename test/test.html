@@ -43,9 +43,11 @@
 	<body>
 		<div id="horizontalTestCase" class="testCase">
 			<ul>
+				<li><a href="#previous" id="menu-prev-section">&laquo; Prev</a></li>
   		  <li><a href="#section1" id="menu-section1">Section 1</a></li>
   		  <li><a href="#section2" id="menu-section2">Section 2</a></li>
   		  <li><a href="#section3" id="menu-section3">Section 3</a></li>
+				<li><a href="#next" id="menu-next-section">Next &raquo;</a></li>
   		</ul>
   		<div class="glider">
   		  <div class="sections">
@@ -63,6 +65,32 @@
   		    </div>
   		  </div>
   		</div>
+			<script type="text/javascript" charset="utf-8">
+				var testGlider = new Glider($$('#horizontalTestCase div.glider').first(), { onGlide: function() {
+					if (testGlider.atFirstSection()) {
+						$('menu-prev-section').hide();
+					} else {
+						$('menu-prev-section').show();
+					}
+					if (testGlider.atLastSection()) {
+						$('menu-next-section').hide();
+					} else {
+						$('menu-next-section').show();
+					}
+				}});
+				$$('#horizontalTestCase a[href^="#section"]').each(function(link) {
+	        link = new GliderLink(link, testGlider);
+					return false;
+	      });
+				$('menu-prev-section').observe('click', function() {
+					testGlider.showPreviousSection();
+					return false;
+				});
+				$('menu-next-section').observe('click', function() {
+					testGlider.showNextSection();
+					return false;
+				});
+			</script>
 		</div>
 		<div id="testlog"> </div>
 		<script type="text/javascript" language="javascript">
@@ -111,7 +139,22 @@
 							].inspect(),
 							glider.collectSectionInfo()
 						);
-					}}
+					}},
+
+					testAtFirstSection: function() { with(this) {
+						glider.currentSection = { index: 0 };
+						assert(glider.atFirstSection());
+
+						glider.currentSection = { index: 1 };
+						assert(!glider.atFirstSection());
+					}},
+
+					testAtLastSection: function() { with(this) {
+						glider.currentSection = { index: glider.sectionInfo.length - 1 };
+						assert(glider.atLastSection());
+						glider.currentSection = { index: 0 };
+						assert(!glider.atLastSection());
+					}},
 
   			});
 			// ]]>
